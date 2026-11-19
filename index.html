@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가위바위보 게임</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+    background: #fff8e1;
+    color: #222;
+    text-align: center;
+  }
+  h1 {
+    font-size: 48px;
+    margin: 10px 0 20px;
+  }
+  .score {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .score div {
+    flex: 1;
+    max-width: 260px;
+    padding: 16px 10px;
+    border-radius: 16px;
+    font-size: 36px;
+    font-weight: bold;
+    border: 4px solid #333;
+  }
+  .score .win  { background: #c8f7c5; }
+  .score .lose { background: #ffd0d0; }
+  .score span { font-size: 56px; display: block; }
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .buttons button {
+    width: 220px;
+    height: 200px;
+    font-size: 48px;
+    font-weight: bold;
+    font-family: inherit;
+    border: 5px solid #1a4fb5;
+    border-radius: 24px;
+    background: #4a90e2;
+    color: #fff;
+    cursor: pointer;
+  }
+  .buttons button .emoji { display: block; font-size: 80px; }
+  .buttons button:hover { background: #2f74c9; }
+  .buttons button:active { transform: scale(0.96); }
+  .buttons button:focus { outline: 6px solid #ffb300; }
+  .picks {
+    font-size: 36px;
+    margin: 10px 0;
+    min-height: 50px;
+  }
+  .result {
+    font-size: 80px;
+    font-weight: bold;
+    padding: 24px 10px;
+    margin: 10px auto;
+    max-width: 700px;
+    border-radius: 20px;
+    background: #fff;
+    border: 4px solid #333;
+  }
+  .result.win  { background: #c8f7c5; color: #0a6b0a; }
+  .result.lose { background: #ffd0d0; color: #b00000; }
+  .result.draw { background: #fff3b0; color: #7a5a00; }
+  .reset {
+    margin-top: 20px;
+    font-size: 30px;
+    font-family: inherit;
+    padding: 14px 36px;
+    border-radius: 16px;
+    border: 4px solid #555;
+    background: #eee;
+    cursor: pointer;
+  }
+  .reset:hover { background: #ddd; }
+</style>
+</head>
+<body>
+
+<h1>✌️ 가위바위보 ✊</h1>
+
+<div class="score">
+  <div class="win">이긴 횟수<span id="winCount">0</span></div>
+  <div class="lose">진 횟수<span id="loseCount">0</span></div>
+</div>
+
+<div class="buttons">
+  <button onclick="play('가위')"><span class="emoji">✌️</span>가위</button>
+  <button onclick="play('바위')"><span class="emoji">✊</span>바위</button>
+  <button onclick="play('보')"><span class="emoji">✋</span>보</button>
+</div>
+
+<div class="picks" id="picks">버튼을 눌러 주세요!</div>
+<div class="result" id="result">어떤 걸 내실래요?</div>
+
+<button class="reset" onclick="resetGame()">다시 시작</button>
+
+<script>
+  var choices = ['가위', '바위', '보'];
+  var emojis = { '가위': '✌️', '바위': '✊', '보': '✋' };
+  var wins = 0;
+  var losses = 0;
+
+  function play(me) {
+    var computer = choices[Math.floor(Math.random() * 3)];
+    var resultBox = document.getElementById('result');
+    var text, cls;
+
+    if (me === computer) {
+      text = '비겼습니다!';
+      cls = 'draw';
+    } else if (
+      (me === '가위' && computer === '보') ||
+      (me === '바위' && computer === '가위') ||
+      (me === '보' && computer === '바위')
+    ) {
+      text = '이겼습니다! 🎉';
+      cls = 'win';
+      wins++;
+    } else {
+      text = '졌습니다 😢';
+      cls = 'lose';
+      losses++;
+    }
+
+    document.getElementById('picks').textContent =
+      '나: ' + emojis[me] + ' ' + me + '   /   컴퓨터: ' + emojis[computer] + ' ' + computer;
+    resultBox.textContent = text;
+    resultBox.className = 'result ' + cls;
+    document.getElementById('winCount').textContent = wins;
+    document.getElementById('loseCount').textContent = losses;
+  }
+
+  function resetGame() {
+    wins = 0;
+    losses = 0;
+    document.getElementById('winCount').textContent = 0;
+    document.getElementById('loseCount').textContent = 0;
+    document.getElementById('picks').textContent = '버튼을 눌러 주세요!';
+    var resultBox = document.getElementById('result');
+    resultBox.textContent = '어떤 걸 내실래요?';
+    resultBox.className = 'result';
+  }
+</script>
+
+</body>
+</html>
